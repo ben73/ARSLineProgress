@@ -880,14 +880,17 @@ private func ars_animateCircles(outerCircle outerCircle: CAShapeLayer, middleCir
         outerAnimation.toValue = ARS_CIRCLE_ROTATION_TO_VALUE
         outerAnimation.duration = ars_config.circleRotationDurationOuter
         outerAnimation.repeatCount = ARS_CIRCLE_ROTATION_REPEAT_COUNT
+        outerAnimation.removedOnCompletion = false
         outerCircle.addAnimation(outerAnimation, forKey: "outerCircleRotation")
         
         let middleAnimation = outerAnimation.copy() as! CABasicAnimation
         middleAnimation.duration = ars_config.circleRotationDurationMiddle
+        middleAnimation.removedOnCompletion = false
         middleCircle.addAnimation(middleAnimation, forKey: "middleCircleRotation")
         
         let innerAnimation = middleAnimation.copy() as! CABasicAnimation
         innerAnimation.duration = ars_config.circleRotationDurationInner
+        innerAnimation.removedOnCompletion = false
         innerCircle.addAnimation(innerAnimation, forKey: "middleCircleRotation")
     }
 }
