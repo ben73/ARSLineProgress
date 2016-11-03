@@ -255,7 +255,7 @@ private var ars_currentCompletionBlock: (() -> Void)?
 // MARK: - Infinite Loader
 // =====================================================================================================================
 
-private final class ARSInfiniteLoader: ARSLoader {
+public final class ARSInfiniteLoader: ARSLoader {
     
 	@objc var emptyView = UIView()
     @objc var backgroundView: UIVisualEffectView
@@ -264,7 +264,7 @@ private final class ARSInfiniteLoader: ARSLoader {
     @objc var innerCircle = CAShapeLayer()
     @objc weak var targetView: UIView?
     
-    init() {
+    public init() {
         backgroundView = ARSBlurredBackgroundRect().view
         NSNotificationCenter.defaultCenter().addObserver(self,
 			selector: #selector(ARSInfiniteLoader.orientationChanged(_:)),
@@ -290,7 +290,7 @@ private final class ARSInfiniteLoader: ARSLoader {
     
 }
 
-private extension ARSInfiniteLoader {
+public extension ARSInfiniteLoader {
     
     func showOnView(view: UIView?, completionBlock: (() -> Void)?) {
         if ars_createdFrameForBackgroundView(backgroundView, onView: view) == false { return }
@@ -304,6 +304,37 @@ private extension ARSInfiniteLoader {
             loaderType: .Infinite)
         ars_animateCircles(outerCircle: outerCircle, middleCircle: middleCircle, innerCircle: innerCircle)
         ars_presentLoader(self, onView: view, completionBlock: completionBlock)
+    }
+    
+    public func showOnView(view: UIView?) {
+        if ars_createdFrameForBackgroundView(backgroundView, onView: view) == false { return }
+        
+        targetView = view
+        
+        self.outerCircle.removeAllAnimations()
+        self.middleCircle.removeAllAnimations()
+        self.innerCircle.removeAllAnimations()
+        
+        ars_createCircles(outerCircle: outerCircle,
+                          middleCircle: middleCircle,
+                          innerCircle: innerCircle,
+                          onView: backgroundView.contentView,
+                          loaderType: .Infinite)
+        ars_animateCircles(outerCircle: outerCircle, middleCircle: middleCircle, innerCircle: innerCircle)
+        ars_presentLoader(self, onView: view, completionBlock: nil, needUpdateCurrentLoader: false)
+    }
+    
+    public func hide() {
+        ars_dispatchOnMainQueue {
+            UIView.animateWithDuration(ars_config.backgroundViewDismissAnimationDuration, delay: 0.0, options: .CurveEaseOut, animations: {
+                self.emptyView.alpha = 0.0
+                self.backgroundView.transform = CGAffineTransformMakeScale(0.9, 0.9)
+            }, completion: nil)
+        }
+        
+        ars_dispatchAfter(ars_config.backgroundViewDismissAnimationDuration) {
+            self.emptyView.removeFromSuperview()
+        }
     }
     
 }
@@ -704,8 +735,10 @@ private func ars_stopCircleAnimations(loader: ARSLoader, completionBlock: () -> 
     CATransaction.commit()
 }
 
-private func ars_presentLoader(loader: ARSLoader, onView view: UIView?, completionBlock: (() -> Void)?) {
-    ars_currentLoader = loader
+private func ars_presentLoader(loader: ARSLoader, onView view: UIView?, completionBlock: (() -> Void)?, needUpdateCurrentLoader: Bool = true) {
+    if needUpdateCurrentLoader {
+        ars_currentLoader = loader
+    }
 	
 	let emptyView = loader.emptyView
 	emptyView.backgroundColor = .clearColor()
