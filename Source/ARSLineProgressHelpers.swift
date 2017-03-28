@@ -123,7 +123,7 @@ func ars_createCircles(_ outerCircle: CAShapeLayer, middleCircle: CAShapeLayer, 
 		path = UIBezierPath(arcCenter: arcCenter,
 		                    radius: circleRadiusOuter,
 		                    startAngle: 0, endAngle:
-			CGFloat(M_PI) / 180 * 3.6 * 1,
+			CGFloat(Double.pi) / 180 * 3.6 * 1,
 		                    clockwise: true)
 	}
 	ars_configureLayer(outerCircle, forView: view, withPath: path.cgPath, withBounds: viewBounds, withColor: ars_config.circleColorOuter)
@@ -139,7 +139,7 @@ func ars_createCircles(_ outerCircle: CAShapeLayer, middleCircle: CAShapeLayer, 
 		path = UIBezierPath(arcCenter: arcCenter,
 		                    radius: circleRadiusMiddle,
 		                    startAngle: 0,
-		                    endAngle: CGFloat(M_PI) / 180 * 3.6 * 1,
+		                    endAngle: CGFloat(Double.pi) / 180 * 3.6 * 1,
 		                    clockwise: true)
 	}
 	ars_configureLayer(middleCircle, forView: view, withPath: path.cgPath, withBounds: viewBounds, withColor: ars_config.circleColorMiddle)
@@ -155,7 +155,7 @@ func ars_createCircles(_ outerCircle: CAShapeLayer, middleCircle: CAShapeLayer, 
 		path = UIBezierPath(arcCenter: arcCenter,
 		                    radius: circleRadiusInner,
 		                    startAngle: 0,
-		                    endAngle: CGFloat(M_PI) / 180 * 3.6 * 1,
+		                    endAngle: CGFloat(Double.pi) / 180 * 3.6 * 1,
 		                    clockwise: true)
 	}
 	ars_configureLayer(innerCircle, forView: view, withPath: path.cgPath, withBounds: viewBounds, withColor: ars_config.circleColorInner)
